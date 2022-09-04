@@ -5,7 +5,10 @@ import 'package:numberpicker/numberpicker.dart';
 class AddMoviesPage extends StatefulWidget {
   const AddMoviesPage({
     Key? key,
+    required this.onSave,
   }) : super(key: key);
+
+  final Function onSave;
 
   @override
   State<AddMoviesPage> createState() => _AddMoviesPageState();
@@ -19,61 +22,67 @@ class _AddMoviesPageState extends State<AddMoviesPage> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          TextField(
-            decoration: const InputDecoration(
-              hintText: 'Podaj nazwę filmu',
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextField(
+              decoration: const InputDecoration(
+                hintText: 'Podaj nazwę filmu',
+              ),
+              onChanged: (newValue) {
+                setState(() {
+                  moviesName = newValue;
+                });
+              },
             ),
-            onChanged: (newValue) {
-              setState(() {
-                moviesName = newValue;
-              });
-            },
-          ),
-          TextField(
-            decoration: const InputDecoration(
-              hintText: 'Opis filmu',
+            TextField(
+              decoration: const InputDecoration(
+                hintText: 'Opis filmu',
+              ),
+              onChanged: (newValue) {
+                setState(() {
+                  descriptionName = newValue;
+                });
+              },
             ),
-            onChanged: (newValue) {
-              setState(() {
-                descriptionName = newValue;
-              });
-            },
-          ),
-          Slider(
-            value: rating,
-            onChanged: (newValue) {
-              setState(() {
-                rating = newValue;
-              });
-            },
-            min: 1.0,
-            max: 10.0,
-            divisions: 18,
-            label: rating.toString(),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              FirebaseFirestore.instance.collection('movies').add({
-                'name': moviesName,
-                'description': descriptionName,
-                'rating': rating,
-                'position': currentValue,
-              });
-            },
-            child: Text('Dodaj'),
-          ),
-          NumberPicker(
-            axis: Axis.horizontal,
-            value: currentValue,
-            minValue: 0,
-            maxValue: 100,
-            onChanged: (newValue) => setState(() => currentValue = newValue),
-          ),
-          Text('Current value: $currentValue'),
-        ],
+            Slider(
+              value: rating,
+              onChanged: (newValue) {
+                setState(() {
+                  rating = newValue;
+                });
+              },
+              min: 1.0,
+              max: 10.0,
+              divisions: 18,
+              label: rating.toString(),
+            ),
+            ElevatedButton(
+              onPressed: descriptionName.isEmpty || descriptionName.isEmpty
+                  ? null
+                  : () {
+                      FirebaseFirestore.instance.collection('movies').add({
+                        'name': moviesName,
+                        'description': descriptionName,
+                        'rating': rating,
+                        'position': currentValue,
+                      });
+                      widget.onSave();
+                    },
+              child: Text('Dodaj'),
+            ),
+            NumberPicker(
+              axis: Axis.horizontal,
+              value: currentValue,
+              minValue: 0,
+              maxValue: 100,
+              onChanged: (newValue) => setState(() => currentValue = newValue),
+            ),
+            Text('Current value: $currentValue'),
+          ],
+        ),
       ),
     );
   }

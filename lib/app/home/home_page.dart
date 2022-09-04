@@ -30,7 +30,13 @@ class _HomePageState extends State<HomePage> {
           return const MoviesPage();
         }
         if (currentIndex == 1) {
-          return const AddMoviesPage();
+          return AddMoviesPage(onSave: () {
+            setState(
+              () {
+                currentIndex = 0;
+              },
+            );
+          });
         }
         return MyAccountPage(email: widget.user.email);
       }),
