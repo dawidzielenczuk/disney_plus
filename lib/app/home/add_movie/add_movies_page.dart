@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:numberpicker/numberpicker.dart';
 
 class AddMoviesPage extends StatefulWidget {
   const AddMoviesPage({
@@ -13,7 +14,8 @@ class AddMoviesPage extends StatefulWidget {
 class _AddMoviesPageState extends State<AddMoviesPage> {
   var moviesName = '';
   var descriptionName = '';
-
+  var rating = 1.0;
+  int currentValue = 3;
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -40,17 +42,37 @@ class _AddMoviesPageState extends State<AddMoviesPage> {
               });
             },
           ),
+          Slider(
+            value: rating,
+            onChanged: (newValue) {
+              setState(() {
+                rating = newValue;
+              });
+            },
+            min: 1.0,
+            max: 10.0,
+            divisions: 18,
+            label: rating.toString(),
+          ),
           ElevatedButton(
             onPressed: () {
               FirebaseFirestore.instance.collection('movies').add({
                 'name': moviesName,
                 'description': descriptionName,
-                'rating': 3.5,
-                'position': 2,
+                'rating': rating,
+                'position': currentValue,
               });
             },
             child: Text('Dodaj'),
           ),
+          NumberPicker(
+            axis: Axis.horizontal,
+            value: currentValue,
+            minValue: 0,
+            maxValue: 100,
+            onChanged: (newValue) => setState(() => currentValue = newValue),
+          ),
+          Text('Current value: $currentValue'),
         ],
       ),
     );

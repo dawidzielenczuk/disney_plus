@@ -9,7 +9,10 @@ class MoviesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-        stream: FirebaseFirestore.instance.collection('movies').snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('movies')
+            .orderBy('position')
+            .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return const Center(child: Text('Something went wrong'));
