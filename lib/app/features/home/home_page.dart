@@ -1,6 +1,6 @@
-import 'package:disney_plus/app/home/add_movie/add_movies_page.dart';
-import 'package:disney_plus/app/home/movies_disney/movies_page.dart';
-import 'package:disney_plus/app/home/my_account/my_account_page.dart';
+import 'package:disney_plus/app/features/home/add_movie/add_movies_page.dart';
+import 'package:disney_plus/app/features/home/movies_disney/movies_page.dart';
+import 'package:disney_plus/app/features/home/my_account/my_account_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
