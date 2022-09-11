@@ -24,6 +24,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Disney+'),
+        elevation: 0,
       ),
       body: Builder(builder: (context) {
         if (currentIndex == 0) {
@@ -50,11 +51,11 @@ class _HomePageState extends State<HomePage> {
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.reviews),
-            label: 'Moje konto',
+            label: 'Filmy',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.add),
-            label: 'Moje konto',
+            label: 'Dodaj',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),

@@ -1,5 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:disney_plus/app/home/movies_disney/cubit/movies_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MoviesPage extends StatelessWidget {
   const MoviesPage({
@@ -8,64 +9,86 @@ class MoviesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-        stream: FirebaseFirestore.instance
-            .collection('movies')
-            .orderBy('position')
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return const Center(child: Text('Something went wrong'));
+    return BlocProvider(
+      create: (context) => MoviesCubit()..start(),
+      child: BlocBuilder<MoviesCubit, MoviesState>(
+        builder: (context, state) {
+          if (state.errorMessage.isNotEmpty) {
+            return Center(
+              child: Text(
+                'Something went wrong: ${state.errorMessage}',
+              ),
+            );
           }
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: Text('Loading'));
+          if (state.isLoading) {
+            //==true
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           }
 
-          final documents = snapshot.data!.docs;
+          final documents = state.documents;
 
-          return ListView(
-            children: [
-              for (final document in documents) ...[
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          return Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("images/disney.png"),
+                fit: BoxFit.fitHeight,
+                opacity: 0.8,
+              ),
+            ),
+            child: ListView(
+              children: [
+                for (final document in documents) ...[
+                  Container(
+                    margin: const EdgeInsets.all(35.0),
+                    color: Colors.blue[100],
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
                         children: [
-                          Column(
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                document['position'].toString(),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    document['position'].toString(),
+                                    style: const TextStyle(fontSize: 25.0),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    document['name'],
+                                  ),
+                                ],
                               ),
-                              const SizedBox(
-                                height: 10,
-                              ),
                               Text(
-                                document['name'],
+                                document['rating'].toString(),
                               ),
                             ],
                           ),
-                          Text(
-                            document['rating'].toString(),
+                          const SizedBox(
+                            height: 50,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Text(
+                              document['description'],
+                            ),
                           ),
                         ],
                       ),
-                      const SizedBox(
-                        height: 50,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Text(
-                          document['description'],
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
+                ],
               ],
-            ],
+            ),
           );
-        });
+        },
+      ),
+    );
   }
 }
