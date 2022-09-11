@@ -1,5 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:disney_plus/app/cubit/root_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyAccountPage extends StatelessWidget {
   const MyAccountPage({
@@ -18,7 +19,7 @@ class MyAccountPage extends StatelessWidget {
           Text('Jesteś zalogowany jako $email'),
           ElevatedButton(
             onPressed: () {
-              FirebaseAuth.instance.signOut();
+              context.read<RootCubit>().signOut();
             },
             child: Text('Wyloguj'),
           ),
