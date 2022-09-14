@@ -60,7 +60,7 @@ class _AddMoviesPageState extends State<AddMoviesPage> {
               label: rating.toString(),
             ),
             ElevatedButton(
-              onPressed: descriptionName.isEmpty || descriptionName.isEmpty
+              onPressed: moviesName.isEmpty || descriptionName.isEmpty
                   ? null
                   : () {
                       FirebaseFirestore.instance.collection('movies').add({

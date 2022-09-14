@@ -21,7 +21,7 @@ class MyAccountPage extends StatelessWidget {
             onPressed: () {
               context.read<RootCubit>().signOut();
             },
-            child: Text('Wyloguj'),
+            child: const Text('Wyloguj'),
           ),
         ],
       ),
